@@ -18,8 +18,9 @@ import java.util.ArrayList;
 public class GameView extends View {
 
     Frog frog;
+    float x1,x2,y1,y2;
+    int SWIPE_THRESHOLD = 100;
     ArrayList<Platform> Platforms;
-
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         SetupGameView();
@@ -37,17 +38,42 @@ public class GameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         int a = event.getActionMasked();
         switch(a)
         {
-            case MotionEvent.ACTION_DOWN:
-            {
+            case MotionEvent.ACTION_DOWN: {
+                x1 = event.getX();
+                y1 = event.getY();
                 break;
             }
             case MotionEvent.ACTION_UP:
             {
+                x2 = event.getX();
+                y2 = event.getY();
+
+                float diffY = y2 - y1;
+                float diffX = x2 - x1;
+
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (x2 > x1) {
+                        //onSwipeRight();
+                        Log.d("TAG", "onTouchEvent: right");
+                    } else {
+                        //onSwipeLeft();
+                        Log.d("TAG", "onTouchEvent: left");
+                    }
+                }
+                else if (Math.abs(diffY) > SWIPE_THRESHOLD) {
+                    if (y2 > y1) {
+                        Log.d("TAG", "onTouchEvent: bot");
+                    } else {
+                        Log.d("TAG", "onTouchEvent: top");
+                    }
+                }
                 break;
             }
+
         }
         return true;
     }
