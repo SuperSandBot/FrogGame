@@ -2,12 +2,12 @@ package com.example.froggame;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 public class Frog extends GameObject {
     ArrayList<Bitmap> Bitmaps = new ArrayList<>();
+    Platform currentplatform;
     public Frog()
     {
         super();
@@ -36,4 +36,12 @@ public class Frog extends GameObject {
             this.Bitmaps.set(i,Bitmap.createScaledBitmap(this.Bitmaps.get(i),this.Width,this.Height,true));
         }
     }
+
+    public void move(Platform platform)
+    {
+        currentplatform = platform;
+        this.setX(platform.getX());
+        this.setY(platform.getY()-40);
+    }
+
 }

@@ -10,6 +10,11 @@ import java.util.ArrayList;
 public class Platform extends GameObject{
 
     Lilypad lilypad;
+    Platform right;
+    Platform left;
+    Platform top;
+    Platform bot;
+
     public Platform()
     {
         super();
