@@ -7,4 +7,70 @@
     tools:context=".MainActivity"
     android:background="@drawable/bg">
 
+    <Button
+        android:id="@+id/btnBestScore"
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:background="@drawable/btn"
+        android:fontFamily="sans-serif-black"
+        android:text="Best Score"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.251" />
+
+    <Button
+        android:id="@+id/btnPlay"
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:background="@drawable/btn"
+        android:fontFamily="sans-serif-black"
+        android:text="Play"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnBestScore"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.894" />
+
+    <Button
+        android:id="@+id/btnSetting"
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:background="@drawable/btn"
+        android:fontFamily="sans-serif-black"
+        android:text="Setting"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnBestScore"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <Button
+        android:id="@+id/btnSound"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/sound"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.093"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
