@@ -37,14 +37,6 @@ public class GameObject {
         this.Height = Height;
     }
 
-    public Bitmap getBm() {
-        return Bm;
-    }
-
-    public void setBm(Bitmap bm) {
-        this.Bm = Bm;
-    }
-
     public Rect getRect()
     {
         return new Rect((int)this.x,(int)this.y,(int)this.x + Width ,(int)this.y + Height);
@@ -52,18 +44,16 @@ public class GameObject {
 
     protected float x,y;
     protected int Width , Height;
-    protected Bitmap Bm;
 
     public GameObject()
     {
 
     }
 
-    public GameObject(float x, float y, int Width, int Height, Bitmap Bm) {
+    public GameObject(float x, float y, int Width, int Height) {
         this.x = x;
         this.y = y;
         this.Width = Width;
         this.Height = Height;
-        this.Bm = Bm;
     }
 }

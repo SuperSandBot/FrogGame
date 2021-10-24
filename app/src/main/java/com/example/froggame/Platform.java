@@ -31,8 +31,8 @@ public class Platform extends GameObject{
         lilypad = new Lilypad();
         lilypad.setX(this.x);
         lilypad.setY(this.y);
-        lilypad.setWidth(220 * SCREEN.WIDTH / SCREEN.WIDTH);
-        lilypad.setHeight(310 * SCREEN.HEIGHT / SCREEN.HEIGHT);
+        lilypad.setWidth(260 * SCREEN.WIDTH / SCREEN.WIDTH);
+        lilypad.setHeight(260 * SCREEN.HEIGHT / SCREEN.HEIGHT);
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(BitmapFactory.decodeResource(resources,R.drawable.lilypad_green));
         bitmaps.add(BitmapFactory.decodeResource(resources,R.drawable.lilypad_teal));

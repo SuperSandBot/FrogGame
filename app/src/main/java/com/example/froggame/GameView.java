@@ -56,7 +56,7 @@ public class GameView extends View {
         frog.draw(canvas);
 
         //gọi handler bảo nó update mỗi 0.01 giây
-        handler.postDelayed(runnable,10);
+        handler.postDelayed(runnable,20);
     }
 
     //Game Controler
@@ -72,6 +72,7 @@ public class GameView extends View {
                 if(frog.currentplatform.right != null)
                 {
                     frog.move(frog.currentplatform.right);
+                    frog.rotate = 90;
                 }
             }
 
@@ -82,6 +83,7 @@ public class GameView extends View {
                 if(frog.currentplatform.left != null)
                 {
                     frog.move(frog.currentplatform.left);
+                    frog.rotate = -90;
                 }
             }
 
@@ -92,6 +94,7 @@ public class GameView extends View {
                 if(frog.currentplatform.top != null)
                 {
                     frog.move(frog.currentplatform.top);
+                    frog.rotate = 0;
                 }
             }
 
@@ -102,6 +105,7 @@ public class GameView extends View {
                 if(frog.currentplatform.bot != null)
                 {
                     frog.move(frog.currentplatform.bot);
+                    frog.rotate = 180;
                 }
             }
         });
@@ -117,8 +121,8 @@ public class GameView extends View {
             for (int y = 0 ; y < platforms[0].length ; y++)
             {
                 Platform platform = new Platform();
-                platform.setX((int)(100 * SCREEN.WIDTH/ 900 + i * 300));
-                platform.setY((int)(100 * SCREEN.HEIGHT/ 300 + y * 370));
+                platform.setX((int)(100 * SCREEN.WIDTH/ 950 + i * 300));
+                platform.setY((int)(100 * SCREEN.HEIGHT/ 290 + y * 380));
                 platform.Setup(this.getResources());
                 platforms[i][y] = platform;
             }
@@ -163,9 +167,9 @@ public class GameView extends View {
     private void SetupFrog()
     {
         frog = new Frog();
-        frog.currentplatform = platforms[0][0];
-        frog.setX(platforms[0][0].getX());
-        frog.setY(platforms[0][0].getY() - 40);
+        frog.currentplatform = platforms[3][3];
+        frog.setX(platforms[3][3].getX());
+        frog.setY(platforms[3][3].getY());
         frog.setWidth(220*SCREEN.WIDTH / SCREEN.WIDTH);
         frog.setHeight(400*SCREEN.HEIGHT / SCREEN.HEIGHT);
         ArrayList<Bitmap> bitmaps = new ArrayList<>();

@@ -17,7 +17,6 @@ public class Lilypad extends GameObject {
         canvas.drawBitmap(getBm(),this.x,this.y,null);
     }
 
-    @Override
     public Bitmap getBm()
     {
         return this.getBitmaps().get(0);
