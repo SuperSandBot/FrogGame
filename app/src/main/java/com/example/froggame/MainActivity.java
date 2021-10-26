@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(!backgroundMusic.isPlaying()){
+        /*if(!backgroundMusic.isPlaying()){
             backgroundMusic.start();
-        }
+        }*/
     }
     @Override
     protected void onStop() {

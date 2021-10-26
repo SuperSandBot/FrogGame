@@ -1,5 +1,6 @@
 package com.example.froggame;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,35 +9,63 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class GameView extends View {
 
+    //index
     Frog frog;
+    Health health;
     Platform[][] platforms;
+    int Score = 0;
+    int MaxEvent = 10;
+    int MaxBadEvent = 4;
+    int MaxGoodEvent = 6;
+    int CurrentBadvent = 0;
+    int CurrentGoodEvent = 0;
+
+    //tool
     Handler handler;
     Runnable runnable;
+    Runnable runnable2;
+    Random random;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         SetupGameView();
         SetupFrog();
         SetupGameControl();
-
-        //Khởi tạo hàm update
+        //Khởi tạo handler để cho runnable update liên tục.
         handler = new Handler();
         runnable = new Runnable() {
             @Override
             public void run() {
+                //chạy lại hàm onDraw
                 invalidate();
             }
         };
+        runnable2 = new Runnable() {
+            @Override
+            public void run() {
+                StartRamdomEvent();
+            }
+        };
+        StartRamdomEvent();
     }
 
+    //cập nhật điểm
+    private void UpdateScore()
+    {
+
+    }
+    //không xài nhưng cần
     @Override
     public boolean performClick() {
         return super.performClick();
@@ -54,10 +83,55 @@ public class GameView extends View {
             }
         }
         frog.draw(canvas);
-
+        health.draw(canvas);
         //gọi handler bảo nó update mỗi 0.01 giây
-        handler.postDelayed(runnable,20);
+        handler.postDelayed(runnable,20 );
     }
+
+    private void StartRamdomEvent()
+    {
+        if(CurrentBadvent + CurrentGoodEvent <= MaxEvent)
+        {
+            random = new Random();
+            int num1 = random.nextInt(4);
+            int num2 = random.nextInt(4);
+            int eventNum = random.nextInt(4);
+
+            if(platforms[num1][num2].hadEvent)
+            {
+                handler.postDelayed(runnable2,1000);
+            }
+            else
+            {
+                switch (eventNum)
+                {
+                    case 0:
+                    {
+                        platforms[num1][num2].hadEvent = true;
+                        platforms[num1][num2].lilypad.StartEvent();
+                        CurrentBadvent++;
+                        break;
+                    }
+                    case 1:
+                    case 2: {
+                        platforms[num1][num2].hadEvent = true;
+                        platforms[num1][num2].fly.StartEvent();
+                        CurrentGoodEvent++;
+                        break;
+                    }
+                    case 3:
+                    {
+                        platforms[num1][num2].hadEvent = true;
+                        platforms[num1][num2].coin.StartEvent();
+                        CurrentGoodEvent++;
+                        break;
+                    }
+                }
+                handler.postDelayed(runnable2,1000);
+            }
+        }
+    }
+
 
     //Game Controler
     private void SetupGameControl()
@@ -121,8 +195,9 @@ public class GameView extends View {
             for (int y = 0 ; y < platforms[0].length ; y++)
             {
                 Platform platform = new Platform();
-                platform.setX((int)(100 * SCREEN.WIDTH/ 950 + i * 300));
-                platform.setY((int)(100 * SCREEN.HEIGHT/ 290 + y * 380));
+                platform.gameView = this;
+                platform.setX(100 * SCREEN.WIDTH/ 950 + i * 300);
+                platform.setY(100 * SCREEN.HEIGHT/ 290 + y * 380);
                 platform.Setup(this.getResources());
                 platforms[i][y] = platform;
             }
@@ -155,6 +230,14 @@ public class GameView extends View {
                 }
             }
         }
+
+        //Setup Health for frog
+        health = new Health();
+        health.setX(100 * SCREEN.WIDTH/ SCREEN.WIDTH);
+        health.setY(100 * SCREEN.HEIGHT/ SCREEN.HEIGHT);
+        health.setWidth(100*SCREEN.WIDTH / SCREEN.WIDTH);
+        health.setHeight(100*SCREEN.HEIGHT / SCREEN.HEIGHT);
+        health.setBitmap(BitmapFactory.decodeResource(this.getResources(),R.drawable.heart));
     }
 
     //kiểm tra DFS
@@ -167,6 +250,7 @@ public class GameView extends View {
     private void SetupFrog()
     {
         frog = new Frog();
+        frog.gameView = this;
         frog.currentplatform = platforms[3][3];
         frog.setX(platforms[3][3].getX());
         frog.setY(platforms[3][3].getY());

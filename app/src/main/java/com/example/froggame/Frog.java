@@ -10,11 +10,14 @@ import java.util.ArrayList;
 
 public class Frog extends GameObject {
 
+    //tool
     Handler handler;
     Runnable runnable;
+
+    //index
     ArrayList<Bitmap> Bitmaps = new ArrayList<>();
     Platform currentplatform;
-
+    GameView gameView;
     float avgSpeedX , avgSpeedY;
     float rotate = 0;
     int currentImage = 0;
@@ -79,14 +82,46 @@ public class Frog extends GameObject {
     //di chuyển qua vị trí khác
     public void move(Platform platform)
     {
-        if( ismoving == false && platform != null)
+        switch (platform.platformtype)
         {
-            ismoving = true;
-            currentplatform = platform;
-            handler.postDelayed(runnable,10);
-            //xác định tóc độ trung bình của cóc trong 6 vòng lập để dến địa điểm
-            avgSpeedX = (currentplatform.getX() - this.x) / 6;
-            avgSpeedY = (currentplatform.getY() - this.y) / 6;
+            case lilypad:
+            {
+                ismoving = true;
+                gameView.health.takeDamge();
+                currentplatform = platform;
+                handler.postDelayed(runnable,10);
+                //xác định tóc độ trung bình của cóc trong 6 vòng lập để dến địa điểm
+                // chia 5.5 cho nó lệch 1 tí nhìn ảo ảo
+                avgSpeedX = (float) ((currentplatform.getX() - this.x) / 5.5);
+                avgSpeedY = (float) ((currentplatform.getY() - this.y) / 5.5);
+
+                switch (platform.itemtype)
+                {
+                    case fly:
+                    {
+                        currentplatform.itemtype = Platform.platformType.nothing;
+                        gameView.health.Heal(4);
+                        break;
+                    }
+
+                    case coin:
+                    {
+                        currentplatform.itemtype = Platform.platformType.nothing;
+                        gameView.Score += 10;
+                        break;
+                    }
+                }
+                break;
+            }
+            case rock:
+            {
+                //nothing happend
+                break;
+            }
+            case nothing:
+            {
+                // gameover ?
+            }
         }
     }
 
@@ -101,13 +136,13 @@ public class Frog extends GameObject {
             handler.removeCallbacks(runnable);
             return;
         }
+        currentImage++;
+
         //đi đến diểm dựa trên agvspeed
         this.x += avgSpeedX;
         this.y += avgSpeedY;
 
-        currentImage++;
-
         //bảo nó gọi hàm lại
-        handler.postDelayed(runnable,50);
+        handler.postDelayed(runnable,20);
     }
 }
