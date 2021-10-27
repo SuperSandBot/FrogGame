@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class Health extends GameObject{
 
     //index
-    private int MaxHeart = 16;
-    private int CurrentHeart = 16;
+    private int MaxHeart = 10;
+    private int CurrentHeart = 10;
     Bitmap Bitmap;
 
     public Health()
@@ -22,20 +22,7 @@ public class Health extends GameObject{
         boolean bool = true;
         for (int i = 0; i < CurrentHeart; i++, y++)
         {
-            if(i == 8)
-            {
-                y = 0;
-                bool = false;
-            }
-            if(bool)
-            {
-                canvas.drawBitmap(Bitmap,this.x + 100 * y,this.y,null);
-
-            }
-            else
-            {
-                canvas.drawBitmap(Bitmap,this.x + 100 * y,this.y + 100,null);
-            }
+            canvas.drawBitmap(Bitmap,this.x + 100 * y,this.y,null);
         }
     }
 

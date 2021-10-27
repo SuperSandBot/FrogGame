@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         dataSource = DataSource.getInstance(this);
         dataSource.open();
-        if(!backgroundMusic.isPlaying()){
+       /* if(!backgroundMusic.isPlaying()){
             backgroundMusic.start();
-        }
+        }*/
     }
     @Override
     protected void onStop() {

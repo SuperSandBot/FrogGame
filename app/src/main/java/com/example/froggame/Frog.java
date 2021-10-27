@@ -17,7 +17,7 @@ public class Frog extends GameObject {
     //index
     ArrayList<Bitmap> Bitmaps = new ArrayList<>();
     Platform currentplatform;
-    GameView gameView;
+    GameActivity gameActivity;
     float avgSpeedX , avgSpeedY;
     float rotate = 0;
     int currentImage = 0;
@@ -91,7 +91,7 @@ public class Frog extends GameObject {
             case lilypad:
             {
                 ismoving = true;
-                gameView.health.takeDamge();
+                gameActivity.health.takeDamge();
                 currentplatform = platform;
                 handler.postDelayed(runnable,20);
                 //xác định tóc độ trung bình của cóc trong 6 vòng lập để dến địa điểm
@@ -103,14 +103,15 @@ public class Frog extends GameObject {
                     case fly:
                     {
                         currentplatform.itemtype = Platform.platformType.nothing;
-                        gameView.health.Heal(4);
+                        gameActivity.health.Heal(8);
+                        gameActivity.Score += 5;
                         break;
                     }
 
                     case coin:
                     {
                         currentplatform.itemtype = Platform.platformType.nothing;
-                        gameView.Score += 10;
+                        gameActivity.Score += 10;
                         break;
                     }
                 }
@@ -126,7 +127,6 @@ public class Frog extends GameObject {
             }
             case nothing:
             {
-                gameView.GameOverEvent();
                 break;
             }
         }
@@ -141,7 +141,7 @@ public class Frog extends GameObject {
             currentImage = 0;
             ismoving = false;
             handler.removeCallbacks(runnable);
-            gameView.LoadGame();
+            gameActivity.LoadGame();
             return;
         }
         currentImage++;
@@ -151,6 +151,6 @@ public class Frog extends GameObject {
         this.y += avgSpeedY;
 
         //bảo nó gọi hàm lại
-        handler.postDelayed(runnable,20);
+        handler.postDelayed(runnable,50);
     }
 }
