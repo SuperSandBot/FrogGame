@@ -3,6 +3,7 @@ package com.example.froggame;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
@@ -153,4 +154,5 @@ public class Frog extends GameObject {
         //bảo nó gọi hàm lại
         handler.postDelayed(runnable,50);
     }
+
 }

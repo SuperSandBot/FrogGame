@@ -16,7 +16,6 @@ public class Fly extends GameObject{
     Platform currentplatform;
     ArrayList<Bitmap> Bitmaps = new ArrayList<>();
     int currentImage = 0;
-    int Turn = 5;
     boolean HadEvent = false;
 
     public Fly()
@@ -61,18 +60,7 @@ public class Fly extends GameObject{
         {
             if(currentplatform.itemtype != Platform.platformType.fly)
             {
-                Turn = 5;
                 currentplatform.ResetFlyEvent();
-                return;
-            }
-            if(Turn == 0)
-            {
-                Turn = 5;
-                currentplatform.ResetFlyEvent();
-            }
-            else
-            {
-                Turn--;
             }
         }
     }

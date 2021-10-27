@@ -2,18 +2,13 @@ package com.example.froggame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,6 +24,7 @@ public class GameActivity extends AppCompatActivity {
     Health health;
     Platform[][] platforms;
 
+    int num1,num2,eventNum;
     int Score = 0;
     int MaxDecay = 5;
     int MaxRock = 2;
@@ -40,6 +36,7 @@ public class GameActivity extends AppCompatActivity {
     int CurrentCoin = 0;
 
     Random random;
+    Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +49,19 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         ScoreView = findViewById(R.id.ScoreView);
+
         gameView = findViewById(R.id.GameView);
 
         random = new Random();
 
         SetupGameView();
         SetupFrog();
-        gameView.platforms = this.platforms;
-        gameView.frog = this.frog;
-        gameView.health = this.health;
-
+        gameView.platforms = platforms;
+        gameView.frog = frog;
+        gameView.health = health;
         SetupGameControl();
         LoadGame();
+
     }
 
     public void UpdateScore()
@@ -75,14 +73,21 @@ public class GameActivity extends AppCompatActivity {
     {
         Score++;
         UpdateScore();
-        StartRamdomEvent();
-        for (int i = 0 ; i < platforms.length; i++ )
-        {
-            for (int y = 0 ; y < platforms[0].length ; y++)
-            {
-                platforms[i][y].LoadGame();
+
+        thread = new Thread(new Runnable(){
+            @Override
+            public void run(){
+                StartRamdomEvent();
+                for (int i = 0 ; i < platforms.length; i++ )
+                {
+                    for (int y = 0 ; y < platforms[0].length ; y++)
+                    {
+                        platforms[i][y].LoadGame();
+                    }
+                }
             }
-        }
+        });
+        thread.start();
     }
 
     public void GameOverEvent()
@@ -95,63 +100,69 @@ public class GameActivity extends AppCompatActivity {
     {
        while(true)
        {
-           int x = random.nextInt(4);
-           int y = random.nextInt(4);
-           if(platforms[x][y] == frog.currentplatform)
+           num1 = random.nextInt(4);
+           num2 = random.nextInt(4);
+           if(platforms[num1][num2] == frog.currentplatform)
            {
                continue;
            }
-           if(platforms[x][y].HadEvent)
+           if(platforms[num1][num2].HadEvent)
            {
                continue;
            }
-           return platforms[x][y];
+           return platforms[num1][num2];
        }
     }
 
-    private void StartRamdomEvent()
+    public void StartRamdomEvent()
     {
         if(CurrentFly + CurrentRock + CurrentDecay + CurrentCoin < 10)
         {
-            Platform platform = getRandomPlatform();
-            platform.HadEvent = true;
-            if(CurrentFly < MaxFly)
-            {
-                platform.StartFlyEvent();
-                CurrentFly++;
-                return;
-            }
-            int eventNum = random.nextInt(3);
-            switch (eventNum)
-            {
-                case 0:
-                {
-                    if(CurrentDecay != MaxDecay)
+            thread = new Thread(new Runnable(){
+                @Override
+                public void run(){
+                    Platform platform = getRandomPlatform();
+                    platform.HadEvent = true;
+                    if(CurrentFly < MaxFly)
                     {
-                        platform.StartLilyEvent();
-                        CurrentDecay++;
+                        platform.StartFlyEvent();
+                        CurrentFly++;
+                        return;
                     }
-                    break;
-                }
-                case 1:
-                {
-                    if(CurrentRock != MaxRock)
+                    eventNum = random.nextInt(3);
+                    switch (eventNum)
                     {
-                        platform.StartRockEvent();
-                        CurrentRock++;
+                        case 0:
+                        {
+                            if(CurrentDecay != MaxDecay)
+                            {
+                                platform.StartLilyEvent();
+                                CurrentDecay++;
+                            }
+                            break;
+                        }
+                        case 1:
+                        {
+                            if(CurrentRock != MaxRock)
+                            {
+                                platform.StartRockEvent();
+                                CurrentRock++;
+                            }
+                            break;
+                        }
+                        case 2:
+                        {
+                            if(CurrentCoin != MaxCoin)
+                            {
+                                platform.StartCoinEvent();
+                                CurrentCoin++;
+                            }
+                            break;
+                        }
                     }
-                    break;
                 }
-                case 2:
-                {
-                    if(CurrentCoin != MaxCoin)
-                    {
-                        platform.StartCoinEvent();
-                        CurrentCoin++;
-                    }
-                    break;
-                }
-            }
+            });
+            thread.start();
         }
     }
     //Game Controler

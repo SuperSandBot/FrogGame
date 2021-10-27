@@ -14,12 +14,13 @@
 
     <TextView
         android:id="@+id/ScoreView"
-        android:layout_width="match_parent"
+        android:layout_width="242dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="111dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="110dp"
         android:text="Score:"
         android:textColor="@color/black"
         android:textSize="30dp" />

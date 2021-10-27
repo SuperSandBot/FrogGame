@@ -37,6 +37,7 @@ public class Platform extends GameObject{
     //tool
     Random random;
     Handler handler;
+    Thread thread;
 
     public Platform()
     {
@@ -47,9 +48,9 @@ public class Platform extends GameObject{
     public void LoadGame()
     {
         lilypad.Decaying();
-        coin.StartEvent();
-        fly.StartEvent();
         rock.StartEvent();
+        fly.StartEvent();
+        coin.StartEvent();
     }
 
     public void draw(Canvas canvas)
@@ -121,6 +122,7 @@ public class Platform extends GameObject{
         fly.HadEvent = false;
         itemtype = platformType.nothing;
         gameActivity.CurrentFly--;
+        gameActivity.StartRamdomEvent();
     }
     public void ResetCoinEvent()
     {
