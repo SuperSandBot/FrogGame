@@ -82,6 +82,10 @@ public class Frog extends GameObject {
     //di chuyển qua vị trí khác
     public void move(Platform platform)
     {
+        if(ismoving)
+        {
+            return;
+        }
         switch (platform.platformtype)
         {
             case lilypad:
@@ -89,12 +93,11 @@ public class Frog extends GameObject {
                 ismoving = true;
                 gameView.health.takeDamge();
                 currentplatform = platform;
-                handler.postDelayed(runnable,10);
+                handler.postDelayed(runnable,20);
                 //xác định tóc độ trung bình của cóc trong 6 vòng lập để dến địa điểm
                 // chia 5.5 cho nó lệch 1 tí nhìn ảo ảo
-                avgSpeedX = (float) ((currentplatform.getX() - this.x) / 5.5);
-                avgSpeedY = (float) ((currentplatform.getY() - this.y) / 5.5);
-
+                avgSpeedX = (float) ((currentplatform.getX() - this.x) / 6);
+                avgSpeedY = (float) ((currentplatform.getY() - this.y) / 6);
                 switch (platform.itemtype)
                 {
                     case fly:
@@ -115,12 +118,16 @@ public class Frog extends GameObject {
             }
             case rock:
             {
-                //nothing happend
+                handler.postDelayed(runnable,20);
+                //không đi đâu
+                avgSpeedX = (float) ((0.0f) / 6);
+                avgSpeedY = (float) ((0.0f) / 6);
                 break;
             }
             case nothing:
             {
-                // gameover ?
+                gameView.GameOverEvent();
+                break;
             }
         }
     }
@@ -134,6 +141,7 @@ public class Frog extends GameObject {
             currentImage = 0;
             ismoving = false;
             handler.removeCallbacks(runnable);
+            gameView.LoadGame();
             return;
         }
         currentImage++;

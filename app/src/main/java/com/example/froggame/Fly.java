@@ -16,7 +16,8 @@ public class Fly extends GameObject{
     Platform currentplatform;
     ArrayList<Bitmap> Bitmaps = new ArrayList<>();
     int currentImage = 0;
-    Boolean isAted = false;
+    int Turn = 5;
+    boolean HadEvent = false;
 
     public Fly()
     {
@@ -27,7 +28,7 @@ public class Fly extends GameObject{
                 PlayAnimation();
             }
         };
-        PlayAnimation();
+        handler.postDelayed(runnable,20);
     }
     public void draw(Canvas canvas)
     {
@@ -56,25 +57,35 @@ public class Fly extends GameObject{
     }
     public void StartEvent()
     {
-        if(isAted)
+        if(HadEvent)
         {
-            currentplatform.ResetGoodEvent();
-        }
-        else
-        {
-            isAted = true;
-            currentplatform.itemtype = Platform.platformType.fly;
-            handler.postDelayed(runnable,5000);
+            if(currentplatform.itemtype != Platform.platformType.fly)
+            {
+                Turn = 5;
+                currentplatform.ResetFlyEvent();
+                return;
+            }
+            if(Turn == 0)
+            {
+                Turn = 5;
+                currentplatform.ResetFlyEvent();
+            }
+            else
+            {
+                Turn--;
+            }
         }
     }
 
     public void PlayAnimation()
     {
-        if(currentImage == Bitmaps.size() -1 )
+        if(currentImage == Bitmaps.size() - 1)
         {
             currentImage = 0;
+            handler.postDelayed(runnable,50);
+            return;
         }
         currentImage++;
-        handler.postDelayed(runnable,20);
+        handler.postDelayed(runnable,50);
     }
 }

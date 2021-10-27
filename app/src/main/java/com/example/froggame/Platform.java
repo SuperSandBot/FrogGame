@@ -26,7 +26,7 @@ public class Platform extends GameObject{
     Fly fly;
     Coin coin;
     GameView gameView;
-    boolean hadEvent = false;
+    boolean HadEvent = false;
 
     //xác định vị trí
     Platform right;
@@ -42,6 +42,14 @@ public class Platform extends GameObject{
     {
         super();
         handler = new Handler();
+    }
+
+    public void LoadGame()
+    {
+        lilypad.Decaying();
+        coin.StartEvent();
+        fly.StartEvent();
+        rock.StartEvent();
     }
 
     public void draw(Canvas canvas)
@@ -74,29 +82,55 @@ public class Platform extends GameObject{
         }
     }
 
-    public void ResetBadEvent()
+    public void StartLilyEvent()
     {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                lilypad.currentImage = 0;
-                hadEvent = false;
-                platformtype = platformType.lilypad;
-                gameView.CurrentBadvent--;
-            }
-        },3000);
+        lilypad.HadEvent = true;
+        platformtype = platformType.lilypad;
     }
-    public void ResetGoodEvent()
+    public void StartRockEvent()
     {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hadEvent = false;
-                itemtype = platformType.nothing;
-                gameView.CurrentGoodEvent--;
-            }
-        },2000);
+        rock.HadEvent = true;
     }
+    public void StartFlyEvent()
+    {
+        fly.HadEvent = true;
+        itemtype = platformType.fly;
+    }
+    public void StartCoinEvent()
+    {
+        coin.HadEvent = true;
+        itemtype = platformType.coin;
+    }
+    public void ResetLilyEvent()
+    {
+        HadEvent = false;
+        lilypad.HadEvent = false;
+        platformtype = platformType.lilypad;
+        gameView.CurrentDecay--;
+    }
+    public void ResetRockEvent()
+    {
+        HadEvent = false;
+        rock.HadEvent = false;
+        platformtype = platformType.lilypad;
+        gameView.CurrentRock--;
+    }
+    public void ResetFlyEvent()
+    {
+        HadEvent = false;
+        fly.HadEvent = false;
+        itemtype = platformType.nothing;
+        gameView.CurrentFly--;
+        gameView.LoadGame();
+    }
+    public void ResetCoinEvent()
+    {
+        HadEvent = false;
+        coin.HadEvent = false;
+        itemtype = platformType.nothing;
+        gameView.CurrentCoin--;
+    }
+
     //khởi tạo các vật thể
     public void Setup(Resources resources)
     {

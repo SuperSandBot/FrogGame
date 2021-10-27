@@ -25,17 +25,19 @@ public class GameView extends View {
     Health health;
     Platform[][] platforms;
     int Score = 0;
-    int MaxEvent = 10;
-    int MaxBadEvent = 4;
-    int MaxGoodEvent = 6;
-    int CurrentBadvent = 0;
-    int CurrentGoodEvent = 0;
+    int MaxDecay = 5;
+    int MaxRock = 2;
+    int MaxFly = 1;
+    int MaxCoin = 2;
+    int CurrentDecay = 0;
+    int CurrentRock = 0;
+    int CurrentFly = 0;
+    int CurrentCoin = 0;
 
     //tool
     Handler handler;
     Runnable runnable;
-    Runnable runnable2;
-    Random random;
+    Random random = new Random();
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -44,6 +46,7 @@ public class GameView extends View {
         SetupGameControl();
         //Khởi tạo handler để cho runnable update liên tục.
         handler = new Handler();
+        LoadGame();
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -51,17 +54,28 @@ public class GameView extends View {
                 invalidate();
             }
         };
-        runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                StartRamdomEvent();
-            }
-        };
+    }
+
+    public void LoadGame()
+    {
+        UpdateScore();
         StartRamdomEvent();
+        for (int i = 0 ; i < platforms.length; i++ )
+        {
+            for (int y = 0 ; y < platforms[0].length ; y++)
+            {
+                platforms[i][y].LoadGame();
+            }
+        }
     }
 
     //cập nhật điểm
     private void UpdateScore()
+    {
+
+    }
+
+    public void GameOverEvent()
     {
 
     }
@@ -90,44 +104,57 @@ public class GameView extends View {
 
     private void StartRamdomEvent()
     {
-        if(CurrentBadvent + CurrentGoodEvent <= MaxEvent)
+        if(CurrentFly + CurrentRock + CurrentDecay + CurrentCoin < 10)
         {
-            random = new Random();
-            int num1 = random.nextInt(4);
-            int num2 = random.nextInt(4);
-            int eventNum = random.nextInt(4);
+            int num1 = random.nextInt(platforms.length);
+            int num2 = random.nextInt(platforms[0].length);
 
-            if(platforms[num1][num2].hadEvent)
+            if(platforms[num1][num2].HadEvent)
             {
-                handler.postDelayed(runnable2,1000);
+                StartRamdomEvent();
+                return;
             }
             else
             {
+                Log.d("TAG", "StartRamdomEvent: ");
+                platforms[num1][num2].HadEvent = true;
+                if(CurrentFly < MaxFly)
+                {
+                    platforms[num1][num2].StartFlyEvent();
+                    CurrentFly++;
+                    return;
+                }
+                int eventNum = random.nextInt(3);
                 switch (eventNum)
                 {
                     case 0:
                     {
-                        platforms[num1][num2].hadEvent = true;
-                        platforms[num1][num2].lilypad.StartEvent();
-                        CurrentBadvent++;
+                        if(CurrentDecay != MaxDecay)
+                        {
+                            platforms[num1][num2].StartLilyEvent();
+                            CurrentDecay++;
+                        }
                         break;
                     }
                     case 1:
-                    case 2: {
-                        platforms[num1][num2].hadEvent = true;
-                        platforms[num1][num2].fly.StartEvent();
-                        CurrentGoodEvent++;
+                    {
+                        if(CurrentRock != MaxRock)
+                        {
+                            platforms[num1][num2].StartRockEvent();
+                            CurrentRock++;
+                        }
                         break;
                     }
-                    case 3:
+                    case 2:
                     {
-                        platforms[num1][num2].hadEvent = true;
-                        platforms[num1][num2].coin.StartEvent();
-                        CurrentGoodEvent++;
+                        if(CurrentCoin != MaxCoin)
+                        {
+                            platforms[num1][num2].StartCoinEvent();
+                            CurrentCoin++;
+                        }
                         break;
                     }
                 }
-                handler.postDelayed(runnable2,1000);
             }
         }
     }

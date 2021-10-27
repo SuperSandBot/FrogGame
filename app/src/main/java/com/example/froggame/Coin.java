@@ -12,7 +12,8 @@ public class Coin extends GameObject{
     //index
     Platform currentplatform;
     android.graphics.Bitmap Bitmap;
-    boolean isAted = false;
+    int Turn = 3;
+    boolean HadEvent = false;
 
     public Coin()
     {
@@ -41,15 +42,24 @@ public class Coin extends GameObject{
 
     public void StartEvent()
     {
-        if(isAted)
+
+        if(HadEvent)
         {
-            currentplatform.ResetGoodEvent();
-        }
-        else
-        {
-            isAted = true;
-            currentplatform.itemtype = Platform.platformType.coin;
-            handler.postDelayed(runnable,5000);
+            if(currentplatform.itemtype != Platform.platformType.coin)
+            {
+                Turn = 3;
+                currentplatform.ResetCoinEvent();
+                return;
+            }
+            if(Turn == 0)
+            {
+                Turn = 3;
+                currentplatform.ResetCoinEvent();
+            }
+            else
+            {
+                Turn--;
+            }
         }
     }
 }

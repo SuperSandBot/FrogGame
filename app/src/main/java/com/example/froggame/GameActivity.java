@@ -2,6 +2,7 @@ package com.example.froggame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,12 +14,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
 
+    TextView ScoreView;
+    GameView gameView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,5 +32,13 @@ public class GameActivity extends AppCompatActivity {
         SCREEN.WIDTH = dm.widthPixels;
         SCREEN.HEIGHT = dm.heightPixels;
         setContentView(R.layout.activity_game);
+        ScoreView = findViewById(R.id.ScoreView);
+        gameView = findViewById(R.id.GameView);
     }
+
+    public void UpdateScore(int score)
+    {
+       //ScoreView.setText("Score :" + score);
+    }
+
 }
