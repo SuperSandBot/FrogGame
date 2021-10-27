@@ -44,13 +44,6 @@ public class GameView extends View {
         };
     }
 
-
-    //không xài nhưng cần
-    @Override
-    public boolean performClick() {
-        return super.performClick();
-    }
-
     //Vẽ hình ảnh lên UI
     public void draw(Canvas canvas)
     {

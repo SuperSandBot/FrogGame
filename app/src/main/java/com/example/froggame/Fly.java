@@ -70,10 +70,11 @@ public class Fly extends GameObject{
         if(currentImage == Bitmaps.size() - 1)
         {
             currentImage = 0;
-            handler.postDelayed(runnable,50);
-            return;
         }
-        currentImage++;
+        else
+        {
+            currentImage++;
+        }
         handler.postDelayed(runnable,50);
     }
 }

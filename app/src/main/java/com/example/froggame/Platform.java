@@ -21,11 +21,11 @@ public class Platform extends GameObject{
     };
     public platformType platformtype;
     public platformType itemtype;
+    GameEvent gameEvent;
     Rock rock;
     Lilypad lilypad;
     Fly fly;
     Coin coin;
-    GameActivity gameActivity;
     boolean HadEvent = false;
 
     //xác định vị trí
@@ -35,9 +35,7 @@ public class Platform extends GameObject{
     Platform bot;
 
     //tool
-    Random random;
     Handler handler;
-    Thread thread;
 
     public Platform()
     {
@@ -107,29 +105,26 @@ public class Platform extends GameObject{
         HadEvent = false;
         lilypad.HadEvent = false;
         platformtype = platformType.lilypad;
-        gameActivity.CurrentDecay--;
     }
     public void ResetRockEvent()
     {
         HadEvent = false;
         rock.HadEvent = false;
         platformtype = platformType.lilypad;
-        gameActivity.CurrentRock--;
     }
     public void ResetFlyEvent()
     {
         HadEvent = false;
         fly.HadEvent = false;
         itemtype = platformType.nothing;
-        gameActivity.CurrentFly--;
-        gameActivity.StartRamdomEvent();
+        gameEvent.CurrentFly--;
+        gameEvent.StartRamdomEvent();
     }
     public void ResetCoinEvent()
     {
         HadEvent = false;
         coin.HadEvent = false;
         itemtype = platformType.nothing;
-        gameActivity.CurrentCoin--;
     }
 
     //khởi tạo các vật thể

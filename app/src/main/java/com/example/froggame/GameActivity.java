@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -19,24 +21,17 @@ public class GameActivity extends AppCompatActivity {
 
     TextView ScoreView;
     GameView gameView;
+    GameEvent gameEvent;
 
     Frog frog;
     Health health;
     Platform[][] platforms;
 
-    int num1,num2,eventNum;
     int Score = 0;
-    int MaxDecay = 5;
-    int MaxRock = 2;
-    int MaxFly = 1;
-    int MaxCoin = 2;
-    int CurrentDecay = 0;
-    int CurrentRock = 0;
-    int CurrentFly = 0;
-    int CurrentCoin = 0;
 
-    Random random;
-    Thread thread;
+
+    Handler handler;
+    Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +47,21 @@ public class GameActivity extends AppCompatActivity {
 
         gameView = findViewById(R.id.GameView);
 
-        random = new Random();
-
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                LoadGame();
+            }
+        };
+        gameEvent = new GameEvent();
         SetupGameView();
         SetupFrog();
         gameView.platforms = platforms;
         gameView.frog = frog;
         gameView.health = health;
+        gameEvent.frog = frog;
+        gameEvent.platforms = platforms;
         SetupGameControl();
         LoadGame();
 
@@ -71,100 +74,34 @@ public class GameActivity extends AppCompatActivity {
 
     public void LoadGame()
     {
-        Score++;
-        UpdateScore();
-
-        thread = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                StartRamdomEvent();
-                for (int i = 0 ; i < platforms.length; i++ )
+        if(health.CurrentHeart == 0)
+        {
+            GameOverEvent();
+        }
+        for (int i = 0 ; i < platforms.length; i++ )
+        {
+            for (int y = 0 ; y < platforms[0].length ; y++)
+            {
+                platforms[i][y].LoadGame();
+                if(frog.currentplatform == platforms[i][y] && platforms[i][y].platformtype == Platform.platformType.nothing)
                 {
-                    for (int y = 0 ; y < platforms[0].length ; y++)
-                    {
-                        platforms[i][y].LoadGame();
-                    }
+                    GameOverEvent();
                 }
             }
-        });
-        thread.start();
+        }
+        Score++;
+        UpdateScore();
+        gameEvent.StartRamdomEvent();
+
     }
 
     public void GameOverEvent()
     {
-
+        Log.d("TAG", "GameOverEvent: GAMEOVER");
     }
 
     // trả về ngẫy nhiên platfrom
-    public Platform getRandomPlatform()
-    {
-       while(true)
-       {
-           num1 = random.nextInt(4);
-           num2 = random.nextInt(4);
-           if(platforms[num1][num2] == frog.currentplatform)
-           {
-               continue;
-           }
-           if(platforms[num1][num2].HadEvent)
-           {
-               continue;
-           }
-           return platforms[num1][num2];
-       }
-    }
 
-    public void StartRamdomEvent()
-    {
-        if(CurrentFly + CurrentRock + CurrentDecay + CurrentCoin < 10)
-        {
-            thread = new Thread(new Runnable(){
-                @Override
-                public void run(){
-                    Platform platform = getRandomPlatform();
-                    platform.HadEvent = true;
-                    if(CurrentFly < MaxFly)
-                    {
-                        platform.StartFlyEvent();
-                        CurrentFly++;
-                        return;
-                    }
-                    eventNum = random.nextInt(3);
-                    switch (eventNum)
-                    {
-                        case 0:
-                        {
-                            if(CurrentDecay != MaxDecay)
-                            {
-                                platform.StartLilyEvent();
-                                CurrentDecay++;
-                            }
-                            break;
-                        }
-                        case 1:
-                        {
-                            if(CurrentRock != MaxRock)
-                            {
-                                platform.StartRockEvent();
-                                CurrentRock++;
-                            }
-                            break;
-                        }
-                        case 2:
-                        {
-                            if(CurrentCoin != MaxCoin)
-                            {
-                                platform.StartCoinEvent();
-                                CurrentCoin++;
-                            }
-                            break;
-                        }
-                    }
-                }
-            });
-            thread.start();
-        }
-    }
     //Game Controler
     private void SetupGameControl()
     {
@@ -227,7 +164,7 @@ public class GameActivity extends AppCompatActivity {
             for (int y = 0 ; y < platforms[0].length ; y++)
             {
                 Platform platform = new Platform();
-                platform.gameActivity = this;
+                platform.gameEvent = this.gameEvent;
                 platform.setX(100 * SCREEN.WIDTH/ 950 + i * 300);
                 platform.setY(100 * SCREEN.HEIGHT/ 290 + y * 380);
                 platform.Setup(this.getResources());

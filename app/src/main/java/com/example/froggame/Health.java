@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class Health extends GameObject{
 
     //index
-    private int MaxHeart = 10;
-    private int CurrentHeart = 10;
+    private int MaxHeart = 8;
+    public int CurrentHeart = 8;
     Bitmap Bitmap;
 
     public Health()

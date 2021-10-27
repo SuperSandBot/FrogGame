@@ -16,7 +16,6 @@ public class Lilypad extends GameObject {
     //index
     Platform currentplatform;
     ArrayList<Bitmap> Bitmaps = new ArrayList<>();
-    float rotate = 0;
     int Turn = 5;
     int currentImage = 0;
     boolean HadEvent = false;
@@ -27,7 +26,7 @@ public class Lilypad extends GameObject {
     }
     public void draw(Canvas canvas)
     {
-        canvas.drawBitmap(getRotatedBm(),this.x,this.y,null);
+        canvas.drawBitmap(getBm(),this.x,this.y,null);
     }
 
     public Bitmap getBm()
@@ -49,14 +48,6 @@ public class Lilypad extends GameObject {
         {
             this.Bitmaps.set(i,Bitmap.createScaledBitmap(Bitmaps.get(i),this.Width,this.Height,true));
         }
-    }
-
-    //xoay hình theo hướng di chuyển
-    public Bitmap getRotatedBm()
-    {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(rotate);
-        return Bitmap.createBitmap(getBm(),0,0,this.Width,this.Height,matrix,true);
     }
 
     public void Decaying()

@@ -3,9 +3,7 @@ package com.example.froggame;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.os.AsyncTask;
 import android.os.Handler;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -56,12 +54,6 @@ public class Frog extends GameObject {
         return this.Bitmaps.get(currentImage);
     }
 
-    //lấy danh sách hình ảnh
-    public ArrayList<Bitmap> getBitmaps()
-    {
-        return this.Bitmaps;
-    }
-
     //khởi tạo hình ảnh
     public void setBitmaps(ArrayList<Bitmap> Bitmaps)
     {
@@ -94,11 +86,11 @@ public class Frog extends GameObject {
                 ismoving = true;
                 gameActivity.health.takeDamge();
                 currentplatform = platform;
-                handler.postDelayed(runnable,20);
                 //xác định tóc độ trung bình của cóc trong 6 vòng lập để dến địa điểm
                 // chia 5.5 cho nó lệch 1 tí nhìn ảo ảo
-                avgSpeedX = (float) ((currentplatform.getX() - this.x) / 6);
-                avgSpeedY = (float) ((currentplatform.getY() - this.y) / 6);
+                avgSpeedX =((currentplatform.getX() - this.x) / 6);
+                avgSpeedY =((currentplatform.getY() - this.y) / 6);
+                handler.postDelayed(runnable,20);
                 switch (platform.itemtype)
                 {
                     case fly:
@@ -112,7 +104,7 @@ public class Frog extends GameObject {
                     case coin:
                     {
                         currentplatform.itemtype = Platform.platformType.nothing;
-                        gameActivity.Score += 10;
+                        gameActivity.Score += 20;
                         break;
                     }
                 }
@@ -122,12 +114,18 @@ public class Frog extends GameObject {
             {
                 handler.postDelayed(runnable,20);
                 //không đi đâu
-                avgSpeedX = (float) ((0.0f) / 6);
-                avgSpeedY = (float) ((0.0f) / 6);
+                avgSpeedX =((0.0f) / 6);
+                avgSpeedY =((0.0f) / 6);
                 break;
             }
             case nothing:
             {
+                ismoving = true;
+                currentplatform = platform;
+                avgSpeedX =((currentplatform.getX() - this.x) / 6);
+                avgSpeedY =((currentplatform.getY() - this.y) / 6);
+                handler.postDelayed(runnable,20);
+                gameActivity.GameOverEvent();
                 break;
             }
         }
@@ -152,7 +150,7 @@ public class Frog extends GameObject {
         this.y += avgSpeedY;
 
         //bảo nó gọi hàm lại
-        handler.postDelayed(runnable,50);
+        handler.postDelayed(runnable,30);
     }
 
 }
