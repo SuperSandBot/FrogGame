@@ -43,10 +43,8 @@ public class GameEvent {
 
     public void StartRamdomEvent()
     {
-        Log.d("TAG", "StartRamdomEvent: "+ getHadEvent());
         if(getHadEvent() != 16)
         {
-            Log.d("TAG", "StartRamdomEvent: qooo");
             Platform platform = getRandomPlatform();
             if(CurrentFly < MaxFly)
             {
