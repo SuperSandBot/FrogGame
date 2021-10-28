@@ -112,10 +112,10 @@ public class Frog extends GameObject {
             }
             case rock:
             {
-                handler.postDelayed(runnable,20);
                 //không đi đâu
                 avgSpeedX =((0.0f) / 6);
                 avgSpeedY =((0.0f) / 6);
+                handler.postDelayed(runnable,20);
                 break;
             }
             case nothing:
@@ -148,7 +148,6 @@ public class Frog extends GameObject {
         //đi đến diểm dựa trên agvspeed
         this.x += avgSpeedX;
         this.y += avgSpeedY;
-
         //bảo nó gọi hàm lại
         handler.postDelayed(runnable,30);
     }

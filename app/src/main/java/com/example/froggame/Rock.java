@@ -13,7 +13,7 @@ public class Rock extends GameObject{
     //index
     Platform currentplatform;
     Bitmap Bitmap;
-    int Turn = 8;
+    int Turn = 7;
     boolean HadEvent = false;
 
     public Rock()
@@ -44,22 +44,24 @@ public class Rock extends GameObject{
     {
         if(HadEvent) {
             switch (Turn) {
-                case 8: {
+                case 7: {
                     currentplatform.lilypad.currentImage = 2;
                     currentplatform.platformtype = Platform.platformType.lilypad;
                     break;
                 }
-                case 7: {
+                case 6: {
                     currentplatform.lilypad.currentImage = 3;
                     currentplatform.platformtype = Platform.platformType.lilypad;
                     break;
                 }
-                case 6: {
+                case 5: {
                     currentplatform.lilypad.currentImage = 0;
                     currentplatform.platformtype = Platform.platformType.nothing;
                     break;
                 }
-                case 5:
+                case 4:
+                case 3:
+                case 2:
                 {
                     currentplatform.platformtype = Platform.platformType.rock;
                     break;
@@ -69,7 +71,7 @@ public class Rock extends GameObject{
                     break;
                 }
                 case 0: {
-                    Turn = 5;
+                    Turn = 7;
                     currentplatform.ResetRockEvent();
                     break;
                 }

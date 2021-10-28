@@ -24,4 +24,66 @@
         android:text="Score:"
         android:textColor="@color/black"
         android:textSize="30dp" />
+
+    <LinearLayout
+        android:id="@+id/GameOverView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gamegverbackground"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="180dp"
+            android:textColor="@color/white"
+            android:textSize="70dp"
+            android:text="GAME OVER"
+            />
+        <TextView
+            android:id="@+id/ScoreV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="50dp"
+            android:text="Score : 0"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="50dp"
+            android:text="Retry ?"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnA"
+                android:layout_width="107dp"
+                android:layout_height="103dp"
+                android:background="@drawable/ok"
+                android:layout_marginLeft="60dp"
+                android:onClick="onRetryAccept"
+                />
+            <Button
+                android:id="@+id/btnB"
+                android:layout_width="107dp"
+                android:layout_height="103dp"
+                android:layout_marginLeft="60dp"
+                android:background="@drawable/close"
+                android:onClick="onRetryCancel"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 </RelativeLayout>

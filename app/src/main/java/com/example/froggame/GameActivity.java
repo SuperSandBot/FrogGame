@@ -2,6 +2,8 @@ package com.example.froggame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,6 +13,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,6 +26,9 @@ public class GameActivity extends AppCompatActivity {
     TextView ScoreView;
     GameView gameView;
     GameEvent gameEvent;
+    LinearLayout gameOverView;
+    Button btnA, btnB;
+    TextView ScoreOnView;
 
     Frog frog;
     Health health;
@@ -44,9 +51,12 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         ScoreView = findViewById(R.id.ScoreView);
-
         gameView = findViewById(R.id.GameView);
-
+        gameOverView = findViewById(R.id.GameOverView);
+        btnA = findViewById(R.id.btnA);
+        btnB = findViewById(R.id.btnB);
+        ScoreOnView = findViewById(R.id.ScoreV);
+        gameOverView.setVisibility(View.GONE);
         handler = new Handler();
         runnable = new Runnable() {
             @Override
@@ -55,6 +65,7 @@ public class GameActivity extends AppCompatActivity {
             }
         };
         gameEvent = new GameEvent();
+
         SetupGameView();
         SetupFrog();
         gameView.platforms = platforms;
@@ -78,7 +89,7 @@ public class GameActivity extends AppCompatActivity {
         {
             GameOverEvent();
         }
-        for (int i = 0 ; i < platforms.length; i++ )
+        for (int i = 0 ; i < platforms.length; i++)
         {
             for (int y = 0 ; y < platforms[0].length ; y++)
             {
@@ -92,17 +103,25 @@ public class GameActivity extends AppCompatActivity {
         Score++;
         UpdateScore();
         gameEvent.StartRamdomEvent();
-
     }
-
     public void GameOverEvent()
     {
-        Log.d("TAG", "GameOverEvent: GAMEOVER");
+        ScoreOnView.setText("Score :" + Score);
+        gameOverView.setVisibility(View.VISIBLE);
     }
 
-    // trả về ngẫy nhiên platfrom
+    public void onRetryAccept(View view)
+    {
+        startActivity(new Intent(getApplicationContext(), GameActivity.class));
+        this.finish();
+    }
+    public void onRetryCancel(View view)
+    {
+        this.finish();
+    }
 
     //Game Controler
+    @SuppressLint("ClickableViewAccessibility")
     private void SetupGameControl()
     {
         gameView.setOnTouchListener(new GameControler(this)

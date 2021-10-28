@@ -27,7 +27,7 @@ public class Coin extends GameObject{
     }
     public void draw(Canvas canvas)
     {
-        canvas.drawBitmap(getBm(),this.x,this.y,null);
+        canvas.drawBitmap(getBm(),this.x+40,this.y+40,null);
     }
 
     public Bitmap getBm()

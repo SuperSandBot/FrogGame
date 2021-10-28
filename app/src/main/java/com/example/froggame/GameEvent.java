@@ -22,7 +22,8 @@ public class GameEvent {
 
     }
 
-    public synchronized Platform getRandomPlatform()
+    // trả về ngẫy nhiên platfrom
+    public Platform getRandomPlatform()
     {
         while(true)
         {
@@ -36,39 +37,58 @@ public class GameEvent {
             {
                 continue;
             }
-
             return platforms[num1][num2];
         }
     }
 
-    public synchronized void StartRamdomEvent()
+    public void StartRamdomEvent()
     {
-        Platform platform = getRandomPlatform();
-        platform.HadEvent = true;
-        if(CurrentFly < MaxFly)
+        Log.d("TAG", "StartRamdomEvent: "+ getHadEvent());
+        if(getHadEvent() != 16)
         {
-            platform.StartFlyEvent();
-            CurrentFly++;
-            return;
+            Log.d("TAG", "StartRamdomEvent: qooo");
+            Platform platform = getRandomPlatform();
+            if(CurrentFly < MaxFly)
+            {
+                platform.StartFlyEvent();
+                CurrentFly++;
+                return;
+            }
+            eventNum = random.nextInt(3);
+            switch (eventNum)
+            {
+                case 0:
+                {
+                    platform.StartLilyEvent();
+                    break;
+                }
+                case 1:
+                {
+                    platform.StartRockEvent();
+                    break;
+                }
+                case 2:
+                {
+                    platform.StartCoinEvent();
+                    break;
+                }
+            }
         }
-        eventNum = random.nextInt(3);
-        switch (eventNum)
+    }
+
+    public int getHadEvent()
+    {
+        int count = 0;
+        for (int i = 0 ; i < platforms.length; i++)
         {
-            case 0:
+            for (int y = 0 ; y < platforms[0].length ; y++)
             {
-                platform.StartLilyEvent();
-                break;
-            }
-            case 1:
-            {
-                platform.StartRockEvent();
-                break;
-            }
-            case 2:
-            {
-                platform.StartCoinEvent();
-                break;
+                if( platforms[i][y].HadEvent)
+                {
+                    count++;
+                }
             }
         }
+        return count;
     }
 }

@@ -84,20 +84,24 @@ public class Platform extends GameObject{
     public void StartLilyEvent()
     {
         lilypad.HadEvent = true;
+        HadEvent = true;
         platformtype = platformType.lilypad;
     }
     public void StartRockEvent()
     {
         rock.HadEvent = true;
+        HadEvent = true;
     }
     public void StartFlyEvent()
     {
         fly.HadEvent = true;
+        HadEvent = true;
         itemtype = platformType.fly;
     }
     public void StartCoinEvent()
     {
         coin.HadEvent = true;
+        HadEvent = true;
         itemtype = platformType.coin;
     }
     public void ResetLilyEvent()
