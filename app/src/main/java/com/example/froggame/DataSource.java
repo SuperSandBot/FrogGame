@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class DataSource {
             if(cursor == null || cursor.getCount() <= 0)
                 return null;
             cursor.moveToFirst();
-            return new PlayerScore(cursor.getString(1), cursor.getInt(2));
+            return cursorToPlayerScore(cursor);
         }
     }
 
@@ -71,6 +69,10 @@ public class DataSource {
         return playerScoreList;
     }
 
+    public void clearALlPlayer(){
+        database.delete(DataHelper.table_name, null, null);
+    }
+
     private PlayerScore cursorToPlayerScore(Cursor cursor){
         PlayerScore playerScore = new PlayerScore();
         playerScore.setPlayerName(cursor.getString(1));
@@ -81,7 +83,7 @@ public class DataSource {
     public void updatePlayerScore(PlayerScore playerScore) {
         ContentValues values = new ContentValues();
         values.put(DataHelper.key_score, playerScore.getBestScore());
-
+        values.put(DataHelper.key_name, playerScore.getPlayerName());
         database.update(DataHelper.table_name, values, DataHelper.key_name + " = ?",
                 new String[]{String.valueOf(playerScore.getPlayerName())});
     }

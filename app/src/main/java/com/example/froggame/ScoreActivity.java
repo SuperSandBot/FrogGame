@@ -1,34 +1,55 @@
 package com.example.froggame;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import java.util.List;
 
 public class ScoreActivity extends AppCompatActivity {
-
+    DataSource dataSource;
+    ScoreAdapter adapter;
+    ListView listView;
+    Button btnClose;
+    Button btnReset;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
-        DataSource dataSource = DataSource.getInstance(this);
+        listView = findViewById(R.id.lvScore);
+        btnClose = findViewById(R.id.btnClose);
+        btnReset = findViewById(R.id.btnReset);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dataSource = DataSource.getInstance(this);
         List<PlayerScore> playerList = dataSource.getAllPlayer();
-        ListView listView = findViewById(R.id.lvScore);
-        ScoreAdapter adapter = new ScoreAdapter(this, playerList);
+        playerList.sort(this::comparator);
+        adapter = new ScoreAdapter(this, playerList);
         listView.setAdapter(adapter);
-        Button btnClose = findViewById(R.id.btnClose);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                close();
-            }
+        btnReset.setOnClickListener(view -> {
+            dataSource.clearALlPlayer();
+            finish();
         });
+        btnClose.setOnClickListener(view -> finish());
     }
 
-    public void close(){
-        this.finish();
+    private int comparator(PlayerScore p1, PlayerScore p2){
+        return p2.getBestScore() - p1.getBestScore();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override

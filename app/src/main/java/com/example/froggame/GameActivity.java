@@ -1,42 +1,36 @@
 package com.example.froggame;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
-
+    MediaPlayer backgroundMusic;
+    DataSource dataSource;
     TextView ScoreView;
     GameView gameView;
     GameEvent gameEvent;
     LinearLayout gameOverView;
     Button btnA, btnB;
     TextView ScoreOnView;
-
+    String playerName;
     Frog frog;
     Health health;
     Platform[][] platforms;
-
     int Score = 0;
-
-
     Handler handler;
     Runnable runnable;
 
@@ -49,7 +43,9 @@ public class GameActivity extends AppCompatActivity {
         SCREEN.WIDTH = dm.widthPixels;
         SCREEN.HEIGHT = dm.heightPixels;
         setContentView(R.layout.activity_game);
-
+        dataSource = DataSource.getInstance(this);
+        Bundle bundle = getIntent().getExtras();
+        playerName = bundle.getString("PlayerName");
         ScoreView = findViewById(R.id.ScoreView);
         gameView = findViewById(R.id.GameView);
         gameOverView = findViewById(R.id.GameOverView);
@@ -57,15 +53,11 @@ public class GameActivity extends AppCompatActivity {
         btnB = findViewById(R.id.btnB);
         ScoreOnView = findViewById(R.id.ScoreV);
         gameOverView.setVisibility(View.GONE);
+        backgroundMusic = MediaPlayer.create(this,R.raw.squidgamewaybackthen);
+        backgroundMusic.setLooping(true);
         handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                LoadGame();
-            }
-        };
+        runnable = this::LoadGame;
         gameEvent = new GameEvent();
-
         SetupGameView();
         SetupFrog();
         gameView.platforms = platforms;
@@ -76,6 +68,16 @@ public class GameActivity extends AppCompatActivity {
         SetupGameControl();
         LoadGame();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dataSource = DataSource.getInstance(this);
+        dataSource.open();
+        if(!backgroundMusic.isPlaying()){
+            backgroundMusic.start();
+        }
     }
 
     public void UpdateScore()
@@ -107,6 +109,20 @@ public class GameActivity extends AppCompatActivity {
     public void GameOverEvent()
     {
         ScoreOnView.setText("Score :" + Score);
+        dataSource.open();
+        PlayerScore player = dataSource.getPlayer(playerName);
+        if (player == null) {
+            PlayerScore newPlayer = new PlayerScore(playerName, Score);
+            dataSource.addPlayer(newPlayer);
+            dataSource.close();
+        }
+        else {
+            if ( player.getBestScore() - Score < 0 ){
+                PlayerScore newPlayer = new PlayerScore(playerName, Score);
+                dataSource.updatePlayerScore(newPlayer);
+                dataSource.close();
+            }
+        }
         gameOverView.setVisibility(View.VISIBLE);
     }
 
@@ -117,10 +133,11 @@ public class GameActivity extends AppCompatActivity {
     }
     public void onRetryCancel(View view)
     {
+        onDestroy();
         this.finish();
     }
 
-    //Game Controler
+    //Game Controller
     @SuppressLint("ClickableViewAccessibility")
     private void SetupGameControl()
     {
@@ -173,10 +190,23 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        backgroundMusic.stop();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (dataSource != null)
+            dataSource.close();
+        super.onDestroy();
+    }
+
     //Setup game khi mới vô
     private void SetupGameView()
     {
-        // khởi tạo 4 * 4 lục bình lên màn hình
+        // khởi tạo 4 * 4 lá sen lên màn hình
         platforms = new Platform[4][4];
         for (int i = 0 ; i < platforms.length; i++ )
         {
