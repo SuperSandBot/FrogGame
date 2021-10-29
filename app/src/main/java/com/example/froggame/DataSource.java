@@ -57,7 +57,7 @@ public class DataSource {
         List<PlayerScore>  playerScoreList = new ArrayList<>();
         Cursor cursor = database.query(DataHelper.table_name, allColumns,
                 null, null, null, null,null );
-        if (cursor == null)
+        if (cursor == null || cursor.getCount() <= 0)
             return null;
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){

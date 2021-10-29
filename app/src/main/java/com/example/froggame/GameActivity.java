@@ -44,8 +44,10 @@ public class GameActivity extends AppCompatActivity {
         SCREEN.HEIGHT = dm.heightPixels;
         setContentView(R.layout.activity_game);
         dataSource = DataSource.getInstance(this);
+
         Bundle bundle = getIntent().getExtras();
         playerName = bundle.getString("PlayerName");
+
         ScoreView = findViewById(R.id.ScoreView);
         gameView = findViewById(R.id.GameView);
         gameOverView = findViewById(R.id.GameOverView);
@@ -118,8 +120,8 @@ public class GameActivity extends AppCompatActivity {
         }
         else {
             if ( player.getBestScore() - Score < 0 ){
-                PlayerScore newPlayer = new PlayerScore(playerName, Score);
-                dataSource.updatePlayerScore(newPlayer);
+                player.setBestScore(Score);
+                dataSource.updatePlayerScore(player);
                 dataSource.close();
             }
         }
@@ -128,12 +130,16 @@ public class GameActivity extends AppCompatActivity {
 
     public void onRetryAccept(View view)
     {
-        startActivity(new Intent(getApplicationContext(), GameActivity.class));
+        Intent intentGame = new Intent(this, GameActivity.class);
+        intentGame.putExtra("PlayerName", playerName);
+        startActivity(intentGame);
         this.finish();
     }
+
     public void onRetryCancel(View view)
     {
-        onDestroy();
+        if (dataSource != null)
+            dataSource.close();
         this.finish();
     }
 
@@ -194,13 +200,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onStop() {
         backgroundMusic.stop();
         super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (dataSource != null)
-            dataSource.close();
-        super.onDestroy();
     }
 
     //Setup game khi mới vô

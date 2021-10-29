@@ -27,14 +27,21 @@ public class ScoreActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         dataSource = DataSource.getInstance(this);
-        List<PlayerScore> playerList = dataSource.getAllPlayer();
-        playerList.sort(this::comparator);
-        adapter = new ScoreAdapter(this, playerList);
-        listView.setAdapter(adapter);
-        btnReset.setOnClickListener(view -> {
-            dataSource.clearALlPlayer();
-            finish();
-        });
+        if(dataSource != null)
+        {
+            dataSource.open();
+            List<PlayerScore> playerList = dataSource.getAllPlayer();
+            if(playerList != null)
+            {
+                playerList.sort(this::comparator);
+                adapter = new ScoreAdapter(this, playerList);
+                listView.setAdapter(adapter);
+            }
+            btnReset.setOnClickListener(view -> {
+                dataSource.clearALlPlayer();
+                finish();
+            });
+        }
         btnClose.setOnClickListener(view -> finish());
     }
 
@@ -49,6 +56,8 @@ public class ScoreActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        if (dataSource != null)
+            dataSource.close();
         super.onStop();
     }
 
