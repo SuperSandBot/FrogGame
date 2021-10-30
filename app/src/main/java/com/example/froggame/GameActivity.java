@@ -9,9 +9,11 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -47,7 +49,6 @@ public class GameActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         playerName = bundle.getString("PlayerName");
-
         ScoreView = findViewById(R.id.ScoreView);
         gameView = findViewById(R.id.GameView);
         gameOverView = findViewById(R.id.GameOverView);
@@ -57,8 +58,10 @@ public class GameActivity extends AppCompatActivity {
         gameOverView.setVisibility(View.GONE);
         backgroundMusic = MediaPlayer.create(this,R.raw.squidgamewaybackthen);
         backgroundMusic.setLooping(true);
+
         handler = new Handler();
         runnable = this::LoadGame;
+
         gameEvent = new GameEvent();
         SetupGameView();
         SetupFrog();
@@ -69,7 +72,6 @@ public class GameActivity extends AppCompatActivity {
         gameEvent.platforms = platforms;
         SetupGameControl();
         LoadGame();
-
     }
 
     @Override
@@ -110,6 +112,7 @@ public class GameActivity extends AppCompatActivity {
     }
     public void GameOverEvent()
     {
+        backgroundMusic.stop();
         ScoreOnView.setText("Score :" + Score);
         dataSource.open();
         PlayerScore player = dataSource.getPlayer(playerName);
@@ -194,6 +197,12 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        backgroundMusic.start();
+        super.onResume();
     }
 
     @Override

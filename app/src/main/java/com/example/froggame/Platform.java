@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -36,6 +37,7 @@ public class Platform extends GameObject{
 
     //tool
     Handler handler;
+
 
     public Platform()
     {
