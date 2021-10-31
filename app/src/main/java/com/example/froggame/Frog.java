@@ -9,6 +9,10 @@ import java.util.ArrayList;
 
 public class Frog extends GameObject {
 
+    //Class for using
+    GameActivity gameActivity;
+    SoundPlayer soundPlayer;
+
     //tool
     Handler handler;
     Runnable runnable;
@@ -16,7 +20,6 @@ public class Frog extends GameObject {
     //index
     ArrayList<Bitmap> Bitmaps = new ArrayList<>();
     Platform currentplatform;
-    GameActivity gameActivity;
     float avgSpeedX , avgSpeedY;
     float rotate = 0;
     int currentImage = 0;
@@ -41,11 +44,11 @@ public class Frog extends GameObject {
     {
         if(rotate == 90 || rotate == -90)
         {
-            canvas.drawBitmap(getRotatedBm(),this.x - 70,this.y + 25,null);
+            canvas.drawBitmap(getRotatedBm(),this.x - 60,this.y + 25,null);
         }
         else
         {
-            canvas.drawBitmap(getRotatedBm(),this.x + 25 ,this.y - 70,null);
+            canvas.drawBitmap(getRotatedBm(),this.x + 25 ,this.y - 60,null);
         }
     }
 
@@ -91,11 +94,13 @@ public class Frog extends GameObject {
                 avgSpeedX =((currentplatform.getX() - this.x) / 6);
                 avgSpeedY =((currentplatform.getY() - this.y) / 6);
                 handler.postDelayed(runnable,20);
+                soundPlayer.playsfxlilypad();
                 switch (platform.itemtype)
                 {
                     case fly:
                     {
                         currentplatform.itemtype = Platform.platformType.nothing;
+                        soundPlayer.playsfxfrog();
                         gameActivity.health.Heal(8);
                         gameActivity.Score += 5;
                         break;
@@ -104,6 +109,7 @@ public class Frog extends GameObject {
                     case coin:
                     {
                         currentplatform.itemtype = Platform.platformType.nothing;
+                        soundPlayer.playsfxcoin();
                         gameActivity.Score += 20;
                         break;
                     }

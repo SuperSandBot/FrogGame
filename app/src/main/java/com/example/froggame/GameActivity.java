@@ -20,19 +20,28 @@ import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
+    //Class for using
+    GameView gameView;
+    GameEvent gameEvent;
     MediaPlayer backgroundMusic;
     DataSource dataSource;
     TextView ScoreView;
-    GameView gameView;
-    GameEvent gameEvent;
+    SoundPlayer soundPlayer;
+
+    //UI element for using
     LinearLayout gameOverView;
     Button btnA, btnB;
     TextView ScoreOnView;
+
+    //index for using
     String playerName;
     Frog frog;
     Health health;
     Platform[][] platforms;
     int Score = 0;
+    boolean isgameover;
+
+    //tool for using
     Handler handler;
     Runnable runnable;
 
@@ -55,14 +64,15 @@ public class GameActivity extends AppCompatActivity {
         btnA = findViewById(R.id.btnA);
         btnB = findViewById(R.id.btnB);
         ScoreOnView = findViewById(R.id.ScoreV);
-        gameOverView.setVisibility(View.GONE);
-        backgroundMusic = MediaPlayer.create(this,R.raw.squidgamewaybackthen);
-        backgroundMusic.setLooping(true);
 
+        gameOverView.setVisibility(View.GONE);
+        backgroundMusic = MediaPlayer.create(this,R.raw.musiccomputergag);
+        backgroundMusic.setLooping(true);
         handler = new Handler();
         runnable = this::LoadGame;
-
         gameEvent = new GameEvent();
+        soundPlayer = new SoundPlayer(this);
+
         SetupGameView();
         SetupFrog();
         gameView.platforms = platforms;
@@ -72,6 +82,7 @@ public class GameActivity extends AppCompatActivity {
         gameEvent.platforms = platforms;
         SetupGameControl();
         LoadGame();
+        isgameover = false;
     }
 
     @Override
@@ -91,6 +102,10 @@ public class GameActivity extends AppCompatActivity {
 
     public void LoadGame()
     {
+        if(isgameover)
+        {
+            return;
+        }
         if(health.CurrentHeart == 0)
         {
             GameOverEvent();
@@ -112,7 +127,9 @@ public class GameActivity extends AppCompatActivity {
     }
     public void GameOverEvent()
     {
+        isgameover = true;
         backgroundMusic.stop();
+        soundPlayer.playsfxgameover();
         ScoreOnView.setText("Score :" + Score);
         dataSource.open();
         PlayerScore player = dataSource.getPlayer(playerName);
@@ -133,6 +150,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void onRetryAccept(View view)
     {
+        soundPlayer.playsfxbuttonclick();
         Intent intentGame = new Intent(this, GameActivity.class);
         intentGame.putExtra("PlayerName", playerName);
         startActivity(intentGame);
@@ -141,6 +159,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void onRetryCancel(View view)
     {
+        soundPlayer.playsfxbuttonclick();
         if (dataSource != null)
             dataSource.close();
         this.finish();
@@ -157,6 +176,10 @@ public class GameActivity extends AppCompatActivity {
             public void onSwipeRight() {
                 super.onSwipeRight();
                 //move to right
+                if(isgameover)
+                {
+                    return;
+                }
                 if(frog.currentplatform.right != null)
                 {
                     frog.move(frog.currentplatform.right);
@@ -168,6 +191,10 @@ public class GameActivity extends AppCompatActivity {
             public void onSwipeLeft() {
                 super.onSwipeLeft();
                 //move to left
+                if(isgameover)
+                {
+                    return;
+                }
                 if(frog.currentplatform.left != null)
                 {
                     frog.move(frog.currentplatform.left);
@@ -179,6 +206,10 @@ public class GameActivity extends AppCompatActivity {
             public void onSwipeTop() {
                 super.onSwipeTop();
                 //move to top
+                if(isgameover)
+                {
+                    return;
+                }
                 if(frog.currentplatform.top != null)
                 {
                     frog.move(frog.currentplatform.top);
@@ -190,6 +221,10 @@ public class GameActivity extends AppCompatActivity {
             public void onSwipeBottom() {
                 super.onSwipeBottom();
                 //move to bot
+                if(isgameover)
+                {
+                    return;
+                }
                 if(frog.currentplatform.bot != null)
                 {
                     frog.move(frog.currentplatform.bot);
@@ -201,7 +236,9 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        backgroundMusic.start();
+        if(!backgroundMusic.isPlaying()){
+            backgroundMusic.start();
+        }
         super.onResume();
     }
 
@@ -222,8 +259,8 @@ public class GameActivity extends AppCompatActivity {
             {
                 Platform platform = new Platform();
                 platform.gameEvent = this.gameEvent;
-                platform.setX(100 * SCREEN.WIDTH/ 950 + i * 300);
-                platform.setY(100 * SCREEN.HEIGHT/ 290 + y * 380);
+                platform.setX(SCREEN.WIDTH/9 + i * SCREEN.WIDTH/5);
+                platform.setY(SCREEN.HEIGHT/3 + y * SCREEN.HEIGHT/7);
                 platform.Setup(this.getResources());
                 platforms[i][y] = platform;
             }
@@ -259,10 +296,10 @@ public class GameActivity extends AppCompatActivity {
 
         //Setup Health for frog
         health = new Health();
-        health.setX(100 * SCREEN.WIDTH/ SCREEN.WIDTH);
-        health.setY(100 * SCREEN.HEIGHT/ SCREEN.HEIGHT);
-        health.setWidth(100*SCREEN.WIDTH / SCREEN.WIDTH);
-        health.setHeight(100*SCREEN.HEIGHT / SCREEN.HEIGHT);
+        health.setX(SCREEN.WIDTH/9);
+        health.setY(SCREEN.HEIGHT/13);
+        health.setWidth(SCREEN.WIDTH/10);
+        health.setHeight(SCREEN.WIDTH/10);
         health.setBitmap(BitmapFactory.decodeResource(this.getResources(),R.drawable.heart));
     }
 
@@ -277,11 +314,12 @@ public class GameActivity extends AppCompatActivity {
     {
         frog = new Frog();
         frog.gameActivity = this;
+        frog.soundPlayer = this.soundPlayer;
         frog.currentplatform = platforms[3][3];
         frog.setX(platforms[3][3].getX());
         frog.setY(platforms[3][3].getY());
-        frog.setWidth(220*SCREEN.WIDTH / SCREEN.WIDTH);
-        frog.setHeight(400*SCREEN.HEIGHT / SCREEN.HEIGHT);
+        frog.setWidth(SCREEN.HEIGHT/11);
+        frog.setHeight(SCREEN.HEIGHT/7);
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.frog1));
         bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.frog2));

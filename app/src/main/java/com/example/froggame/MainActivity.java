@@ -1,17 +1,25 @@
 package com.example.froggame;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer backgroundMusic;
+    private SoundPlayer soundPlayer;
     boolean soundCheck = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +30,15 @@ public class MainActivity extends AppCompatActivity {
         Button btnScore = findViewById(R.id.btnBestScore);
         Button btnSound = findViewById(R.id.btnSound);
         Button btnPlay = findViewById(R.id.btnPlay);
+        soundPlayer = new SoundPlayer(this);
 
-        backgroundMusic = MediaPlayer.create(this,R.raw.squidgamepinksoldiers);
+        backgroundMusic = MediaPlayer.create(this,R.raw.musiccolorbock);
         backgroundMusic.setLooping(true);
 
-        btnScore.setOnClickListener(view -> startActivity(intentScore));
+        btnScore.setOnClickListener(view ->{
+            soundPlayer.playsfxbuttonclick();
+            startActivity(intentScore);
+        });
 
         btnSound.setOnClickListener(view -> {
             if (soundCheck)
@@ -42,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 btnSound.setBackground(getDrawable(R.drawable.sound_off));
                 soundCheck = true;
             }
-
+            soundPlayer.playsfxbuttonclick();
         });
 
         btnPlay.setOnClickListener(view -> {
@@ -54,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentGame);
                 onStop();
             }
+            soundPlayer.playsfxbuttonclick();
         });
     }
     @Override

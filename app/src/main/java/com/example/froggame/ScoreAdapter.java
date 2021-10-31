@@ -37,7 +37,7 @@ public class ScoreAdapter extends BaseAdapter {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.customlayout, null);
         TextView txtName = view.findViewById(R.id.txtPlayer);
-        String txt = players.get(i).getPlayerName() + " " +players.get(i).getBestScore();
+        String txt = players.get(i).getPlayerName() + "          " +players.get(i).getBestScore();
         txtName.setText(txt);
         return view;
     }

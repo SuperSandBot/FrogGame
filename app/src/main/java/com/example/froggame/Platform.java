@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -140,8 +141,8 @@ public class Platform extends GameObject{
         lilypad.currentplatform = this;
         lilypad.setX(this.x);
         lilypad.setY(this.y);
-        lilypad.setWidth(260 * SCREEN.WIDTH / SCREEN.WIDTH);
-        lilypad.setHeight(260 * SCREEN.HEIGHT / SCREEN.HEIGHT);
+        lilypad.setWidth(SCREEN.HEIGHT/10);
+        lilypad.setHeight(SCREEN.HEIGHT/10);
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(BitmapFactory.decodeResource(resources,R.drawable.lilypad_green));
         bitmaps.add(BitmapFactory.decodeResource(resources,R.drawable.lilypad_teal));
@@ -153,8 +154,8 @@ public class Platform extends GameObject{
         rock.currentplatform = this;
         rock.setX(this.x);
         rock.setY(this.y);
-        rock.setWidth(260 * SCREEN.WIDTH / SCREEN.WIDTH);
-        rock.setHeight(260 * SCREEN.HEIGHT / SCREEN.HEIGHT);
+        rock.setWidth(SCREEN.HEIGHT/9);
+        rock.setHeight(SCREEN.HEIGHT/9);
         rock.setBitmap(BitmapFactory.decodeResource(resources,R.drawable.rock));
         platformtype = platformType.lilypad;
 
@@ -162,8 +163,8 @@ public class Platform extends GameObject{
         fly.currentplatform = this;
         fly.setX(this.x);
         fly.setY(this.y);
-        fly.setWidth(160 * SCREEN.WIDTH / SCREEN.WIDTH);
-        fly.setHeight(160 * SCREEN.HEIGHT / SCREEN.HEIGHT);
+        fly.setWidth(SCREEN.HEIGHT/16);
+        fly.setHeight(SCREEN.HEIGHT/16);
         bitmaps = new ArrayList<>();
         bitmaps.add(BitmapFactory.decodeResource(resources,R.drawable.fly1));
         bitmaps.add(BitmapFactory.decodeResource(resources,R.drawable.fly2));
@@ -173,8 +174,8 @@ public class Platform extends GameObject{
         coin.currentplatform = this;
         coin.setX(this.x);
         coin.setY(this.y);
-        coin.setWidth(160 * SCREEN.WIDTH / SCREEN.WIDTH);
-        coin.setHeight(160 * SCREEN.HEIGHT / SCREEN.HEIGHT);
+        coin.setWidth(SCREEN.HEIGHT/16);
+        coin.setHeight(SCREEN.HEIGHT/16);
         coin.setBitmap(BitmapFactory.decodeResource(resources,R.drawable.coin));
         itemtype = platformType.nothing;
     }

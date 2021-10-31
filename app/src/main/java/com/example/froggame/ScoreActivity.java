@@ -14,6 +14,8 @@ public class ScoreActivity extends AppCompatActivity {
     ListView listView;
     Button btnClose;
     Button btnReset;
+    SoundPlayer soundPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +23,7 @@ public class ScoreActivity extends AppCompatActivity {
         listView = findViewById(R.id.lvScore);
         btnClose = findViewById(R.id.btnClose);
         btnReset = findViewById(R.id.btnReset);
+        soundPlayer = new SoundPlayer(this);
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -41,8 +44,13 @@ public class ScoreActivity extends AppCompatActivity {
                 dataSource.clearALlPlayer();
                 finish();
             });
+            soundPlayer.playsfxbuttonclick();
         }
-        btnClose.setOnClickListener(view -> finish());
+        btnClose.setOnClickListener(view ->
+        {
+            soundPlayer.playsfxbuttonclick();
+            finish();
+        });
     }
 
     private int comparator(PlayerScore p1, PlayerScore p2){
