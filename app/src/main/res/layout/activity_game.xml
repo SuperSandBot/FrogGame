@@ -82,20 +82,21 @@
 
             <Button
                 android:id="@+id/btnA"
-                android:layout_width="107dp"
-                android:layout_height="103dp"
-                android:background="@drawable/ok"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginLeft="60dp"
-                android:onClick="onRetryAccept"
-                />
+                android:layout_marginRight="60dp"
+                android:background="@drawable/ok"
+                android:onClick="onRetryAccept" />
+
             <Button
                 android:id="@+id/btnB"
-                android:layout_width="107dp"
-                android:layout_height="103dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
                 android:background="@drawable/close"
-                android:onClick="onRetryCancel"
-                />
+                android:onClick="onRetryCancel" />
         </LinearLayout>
 
     </LinearLayout>

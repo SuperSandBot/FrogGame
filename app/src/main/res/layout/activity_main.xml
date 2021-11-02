@@ -48,7 +48,7 @@
 
     <EditText
         android:id="@+id/edtPlayerName"
-        android:layout_width="350dp"
+        android:layout_width="320dp"
         android:layout_height="70dp"
         android:layout_marginBottom="340dp"
         android:background="@drawable/table"
@@ -69,8 +69,8 @@
 
     <Button
         android:id="@+id/btnSound"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="36dp"
         android:background="@drawable/sound"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,15 +80,14 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageView
-        android:layout_width="373dp"
-        android:layout_height="112dp"
+        android:layout_width="350dp"
+        android:layout_height="100dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/gamebanner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bgfrog"
-        />
+        app:layout_constraintTop_toTopOf="@+id/bgfrog" />
 
     <ImageView
         android:id="@+id/bgfrog"
@@ -97,7 +96,8 @@
         android:background="@drawable/bgfrog"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
